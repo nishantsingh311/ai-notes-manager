@@ -1,0 +1,7 @@
+import { useState } from "react";
+import { X } from "lucide-react";
+
+export default function NoteModal({ note = null, saving = false, error = "", onClose, onSave }) {
+    const [form, setForm] = useState({ title: note?.title || "", content: note?.content || "" });
+    return <div className="modal-overlay" onMouseDown={onClose}><div className="modal" onMouseDown={(event) => event.stopPropagation()}><div className="modal-header"><div><h2>{note ? "Edit Note" : "Create a Note"}</h2><p>Capture your thoughts and ideas.</p></div><button className="close-button" onClick={onClose} aria-label="Close"><X size={20} /></button></div>{error && <div className="error-message">{error}</div>}<form onSubmit={(event) => { event.preventDefault(); onSave(form); }}><label htmlFor="note-title">Title</label><input id="note-title" value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} placeholder="Enter note title" maxLength={255} required /><label htmlFor="note-content">Content</label><textarea id="note-content" value={form.content} onChange={(event) => setForm({ ...form, content: event.target.value })} placeholder="Write your note here..." rows={8} required /><div className="modal-footer"><button type="button" className="secondary-button" onClick={onClose}>Cancel</button><button type="submit" className="primary-button" disabled={saving}>{saving ? "Saving..." : "Save Note"}</button></div></form></div></div>;
+}
