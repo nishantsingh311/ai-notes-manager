@@ -50,7 +50,7 @@ EMBEDDING_PROVIDER=ollama
 EMBEDDING_MODEL=nomic-embed-text
 EMBEDDING_BASE_URL=http://127.0.0.1:11434
 EMBEDDING_TIMEOUT=30
-EMBEDDING_MIN_SIMILARITY=0.35
+EMBEDDING_MIN_SIMILARITY=0.37
 ```
 
 Run `php artisan config:clear` after changing these values if configuration is cached. The API keeps the existing search response shape:
@@ -59,7 +59,7 @@ Run `php artisan config:clear` after changing these values if configuration is c
 GET /api/notes/search?q=planning+a+weekend+outdoors&limit=5
 ```
 
-Successful responses contain `success`, `message`, and `data`; each data item contains a note and its `similarity_score`. Set `limit` between 1 and 100. Results below `EMBEDDING_MIN_SIMILARITY` are excluded; the default cutoff is `0.35` and can be adjusted for your model and notes. If Ollama is stopped or the model is missing, create, update, and search requests that need embeddings return HTTP 503 with a setup message. The application does not switch to hash vectors. If you change embedding models, re-embed the existing notes before relying on search results, especially when the models produce vectors with the same dimensions.
+Successful responses contain `success`, `message`, and `data`; each data item contains a note and its `similarity_score`. Set `limit` between 1 and 100. Results below `EMBEDDING_MIN_SIMILARITY` are excluded; the default cutoff is `0.37` and can be adjusted for your model and notes. If Ollama is stopped or the model is missing, create, update, and search requests that need embeddings return HTTP 503 with a setup message. The application does not switch to hash vectors. If you change embedding models, re-embed the existing notes before relying on search results, especially when the models produce vectors with the same dimensions.
 
 To use a different embedding backend, implement `App\Contracts\EmbeddingProviderInterface` and register it for the corresponding `EMBEDDING_PROVIDER` value in `AppServiceProvider`.
 

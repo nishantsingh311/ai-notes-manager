@@ -88,11 +88,11 @@ class NoteApiTest extends TestCase
 
     public function test_semantic_search_excludes_weakly_related_notes(): void
     {
-        config(['services.embeddings.min_similarity' => 0.35]);
+        config(['services.embeddings.min_similarity' => 0.37]);
         Note::create([
             'title' => 'Morning fitness routine',
             'content' => 'Running and exercise each morning',
-            'embedding' => [0.1, 0.994987437],
+            'embedding' => [0.36, 0.932952304],
         ]);
 
         Http::fake([

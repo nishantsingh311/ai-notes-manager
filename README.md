@@ -149,7 +149,7 @@ EMBEDDING_PROVIDER=ollama
 EMBEDDING_MODEL=nomic-embed-text
 EMBEDDING_BASE_URL=http://127.0.0.1:11434
 EMBEDDING_TIMEOUT=30
-EMBEDDING_MIN_SIMILARITY=0.35
+EMBEDDING_MIN_SIMILARITY=0.37
 ```
 
 Laravel calls Ollama's `/api/embed`. The app does not download models on startup and does not fall back to hash vectors. Missing or dimension-incompatible stored vectors are regenerated during search if Ollama is available. Unavailable Ollama returns a safe service error. With Docker Desktop on macOS, use `http://host.docker.internal:11434`; see [DOCKER-SETUP.md](DOCKER-SETUP.md).
@@ -347,7 +347,7 @@ There is no note-to-user relationship or user foreign key in the notes table. La
 | `openai` | OpenAI model-generated summary | `OPENAI_API_KEY`, `OPENAI_MODEL` |
 | `gemini` | Google Gemini `generateContent` summary | `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TIMEOUT` |
 
-Embedding uses its own `EmbeddingProviderInterface`, currently Ollama. On note create/update the app embeds `title + content`; search embeds the query and compares vectors using cosine similarity. It filters scores below `EMBEDDING_MIN_SIMILARITY` (default `0.35`), sorts highest first, applies the requested limit, and returns scores without vectors. Re-embed existing notes when changing embedding models so vectors share a model space.
+Embedding uses its own `EmbeddingProviderInterface`, currently Ollama. On note create/update the app embeds `title + content`; search embeds the query and compares vectors using cosine similarity. It filters scores below `EMBEDDING_MIN_SIMILARITY` (default `0.37`), sorts highest first, applies the requested limit, and returns scores without vectors. Raise or lower the cutoff for your model and note collection. Re-embed existing notes when changing embedding models so vectors share a model space.
 
 Async summaries use the `GenerateNoteSummary` queue job, mark status, retry up to three times with backoff, store successful summaries, and expose status through the polling endpoint. Docker starts a worker service. The React frontend currently uses synchronous summary generation; async support is available through the API but is not wired into the UI.
 
@@ -395,7 +395,7 @@ Use [`backend/.env.example`](backend/.env.example) for host Laravel and [`.env.d
 | `OPENAI_API_KEY`, `OPENAI_MODEL` | OpenAI summary | Secret key and account model ID |
 | `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TIMEOUT` | Gemini summary | blank key, `gemini-3.8-flash`, `120` seconds |
 | `EMBEDDING_PROVIDER`, `EMBEDDING_MODEL`, `EMBEDDING_BASE_URL`, `EMBEDDING_TIMEOUT` | Embeddings | ollama, nomic-embed-text, local URL, 30 |
-| `EMBEDDING_MIN_SIMILARITY` | Search result threshold | `0.35` |
+| `EMBEDDING_MIN_SIMILARITY` | Search result threshold | `0.37` |
 | `API_RATE_LIMIT_PER_MINUTE`, `SEMANTIC_SEARCH_RATE_LIMIT_PER_MINUTE`, `AI_SUMMARY_RATE_LIMIT_PER_MINUTE` | Limits per IP | `60`, `10`, `5` |
 
 Docker port and DB settings are in `.env.docker.example`. Protect app keys, database passwords, and AI keys as secrets.

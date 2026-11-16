@@ -55,7 +55,7 @@ return [
         'model' => env('EMBEDDING_MODEL', 'nomic-embed-text'),
         'base_url' => env('EMBEDDING_BASE_URL', 'http://127.0.0.1:11434'),
         'timeout' => (int) env('EMBEDDING_TIMEOUT', 30),
-        'min_similarity' => (float) env('EMBEDDING_MIN_SIMILARITY', 0.35),
+        'min_similarity' => (float) env('EMBEDDING_MIN_SIMILARITY', 0.37),
     ],
 
 ];
